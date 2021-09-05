@@ -26,7 +26,7 @@ func main() {
 
 	// #Flow
 	// Input User Handler
-	// input user di proses ke service
+	// input user diproses di service
 	// service diproses ke repository
 	// repository masuk ke db
 
@@ -36,6 +36,7 @@ func main() {
 
 	api.POST("/register", userHandler.RegisterUser)
 	api.POST("/login", userHandler.Login)
+	api.POST("/check-email", userHandler.CheckEmailvailability)
 
 	router.Run()
 }
