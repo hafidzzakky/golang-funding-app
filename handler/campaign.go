@@ -20,7 +20,7 @@ func NewCampaignHandler(campaignService campaign.Service) *campaignHandler {
 func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 	// Get Query Params
 	userID, _ := strconv.Atoi(c.Query("user_id"))
-	campaigns, err := h.campaignService.FindCampaigns(userID)
+	campaigns, err := h.campaignService.GetCampaigns(userID)
 	if err != nil {
 		errors := helper.FormatValidationError(err)
 		errorMessage := gin.H{"errors": errors}
@@ -31,5 +31,25 @@ func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 
 	formatter := campaign.FormatCampaigns(campaigns)
 	response := helper.APIResponse("Success get campaigns", http.StatusOK, "success", formatter)
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *campaignHandler) GetCampaign(c *gin.Context) {
+	var input campaign.GetCampaignDetailInput
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get detail campaign", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	campaignDetail, err := h.campaignService.GetCampaignById(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get detail campaign", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success get campaign detail", http.StatusOK, "success", campaign.FormatCampaignDetail(campaignDetail))
 	c.JSON(http.StatusOK, response)
 }

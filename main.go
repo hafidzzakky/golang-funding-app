@@ -53,6 +53,7 @@ func main() {
 	api.POST("/check-email", userHandler.CheckEmailvailability)
 	api.POST("/avatars", authMiddleWare(authService, userService), userHandler.UploadAvatar)
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
+	api.GET("/campaigns/:id", campaignHandler.GetCampaign)
 
 	router.Run()
 }
