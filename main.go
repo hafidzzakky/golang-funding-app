@@ -6,6 +6,7 @@ import (
 	"bwastartup/handler"
 	"bwastartup/helper"
 	"bwastartup/user"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -52,8 +53,10 @@ func main() {
 	api.POST("/login", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailvailability)
 	api.POST("/avatars", authMiddleWare(authService, userService), userHandler.UploadAvatar)
+
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
 	api.GET("/campaigns/:id", campaignHandler.GetCampaign)
+	api.POST("/campaigns", authMiddleWare(authService, userService), campaignHandler.CreateCampaign)
 
 	router.Run()
 }
@@ -91,6 +94,7 @@ func authMiddleWare(authService auth.Service, userService user.Service) gin.Hand
 		}
 
 		UserID := int(claim["user_id"].(float64))
+		fmt.Println("claim : ", claim)
 		user, err := userService.GetUserByID(UserID)
 
 		if err != nil {

@@ -15,6 +15,7 @@ type CampaignFormatter struct {
 
 func FormatCampaign(campaign Campaign) CampaignFormatter {
 	campaignFormatter := CampaignFormatter{}
+	campaignFormatter.Name = campaign.Name
 	campaignFormatter.ID = campaign.ID
 	campaignFormatter.UserID = campaign.UserID
 	campaignFormatter.Shortdescription = campaign.ShortDescription
